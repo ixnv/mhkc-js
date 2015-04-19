@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Чат</title>
+	<style>
+		#send-msg-form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+		#m { border: 0; padding: 10px; width: 85%; margin-right: .5%; }
+		#messages { list-style-type: none; margin: 0; padding: 0; }
+		#messages li { padding: 5px 10px; }
+		#messages li:nth-child(odd) { background: #eee; }
+	</style>
+	<link rel="stylesheet" href="css/materialize.min.css">
+	<script src="js/lib/jquery-1.11.1.js"></script>
+	<script src="js/lib/materialize.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	
+	<script src="js/mhkc.js"></script>
+	<script src="js/chat.js"></script>
+</head>
+<body>
+<div id="chat" style="display:none">
+	<div>
+		<ul id="messages" style="display:inline-block"></ul>
+		<div style="display:inline-block;float: right;margin: 10px 40px;">
+			<div>кол-во: <span id="users-count">0</span></div>
+			<div><a href="crypt.html">Демо шифрования</a></div>
+		</div>
+	</div>
+	<form id="send-msg-form" action="">
+		<input id="m" autocomplete="off">
+		<button class="waves-effect waves-light btn">Отправить</button>
+	</form>
+</div>
+<div id="sign-in-modal" class="modal" style="display:block; top:130px;">
+	<div class="modal-content">
+		<h1>Войти</h1>
+		<p class="caption">Чат с использованием шифрования Меркла-Хеллмана</p>
+		<div class="row">
+			<div class="input-field">
+				<input id="user-name" type="text">
+				<label for="user-name">имя пользователя</label>	
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a id="sign-in-btn" class="modal-action modal-close waves-effect waves-green btn-flat">Войти</a>
+	</div>
+</div>
+</body>
+</html>

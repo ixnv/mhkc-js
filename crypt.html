@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Криптосистема Меркла-Хеллмана</title>
+    <script type="text/javascript" src="index.js"></script>
+    <script src="js/lib/jquery-1.11.1.js"></script>
+    <script src="js/mhkc.js"></script>
+    <script>
+        $(function () {
+            var pr_key, pub_key, k_len;
+            var modulo, multiplier, invmodulo;
+
+            $('#gen-keys').click(function () {
+                k_len = $('#key-length').val();
+
+                if (k_len == '') {
+                    alert('не задана длина ключа')
+                    return;
+                }
+
+                pr_key = gen_private_key(k_len);
+
+                modulo = gen_mod(pr_key, k_len);
+                multiplier = gen_multiplier(modulo);
+                invmodulo = gen_inv_mod(multiplier, modulo);
+
+                pub_key = gen_public_key(pr_key, k_len, modulo, multiplier);
+
+                $('#priv-key').val(pr_key);
+                $('#pub-key').val(pub_key);
+            });
+
+            function isValidKeys() {
+                return $('#priv-key').val().length && $('#pub-key').val().length;
+            }
+
+            $('#encode-btn').click(function () {
+                if (!isValidKeys()) {
+                    alert('Сперва нужно генерировать ключи');
+                    return;
+                }
+
+                $('#encoded-res').val(encode($('#encoded-text').val(), k_len, pub_key));
+            });
+
+            $('#decode-btn').click(function () {
+                if (!isValidKeys()) {
+                    alert('Сперва нужно генерировать ключи');
+                    return;
+                }
+
+                $('#decoded-res').val(decode($('#decoded-text').val(), k_len, pr_key, invmodulo, modulo));
+            })
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <div>
+            <label for="key-length">длина ключа</label>
+            <input type="text" id="key-length" value="16">
+        </div>
+        <div>
+            <div style="float:left">
+                <label for="priv-key">приватный ключ</label>
+                <textarea id="priv-key" disabled="disabled"></textarea>
+            </div>
+            <div style="float:left">
+                <label for="pub-key">публичный ключ</label>    
+                <textarea id="pub-key" disabled="disabled"></textarea>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <button id="gen-keys">Генерировать ключи</button>
+        <div>
+            <div style="float:left">
+                <div>
+                    <textarea id="encoded-text" cols="30" rows="10"></textarea>
+                </div>
+                <div>
+                    <button id="encode-btn">Зашифровать</button>
+                </div>
+                <div>
+                    <label for="encoded-res">Результат</label><br>
+                    <textarea id="encoded-res" cols="30" rows="10"></textarea>
+                </div>
+            </div>
+            <div style="float:left; margin-left:10px;">
+                <div>
+                    <textarea id="decoded-text" cols="30" rows="10"></textarea>
+                </div>
+                <div>
+                    <button id="decode-btn">Дешифровать</button>
+                </div>
+                <div>
+                    <label for="decoded-res">Результат</label><br>
+                    <textarea id="decoded-res" cols="30" rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
